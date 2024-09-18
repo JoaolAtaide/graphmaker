@@ -2,6 +2,7 @@ import streamlit as st
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
+from io import BytesIO
 
 # Título da aplicação
 st.title("Gerador de Gráficos de Incidentes Escolares")
@@ -42,5 +43,23 @@ if escolas and num_chamados:
 
     # Mostrar o gráfico no app
     st.pyplot(plt)
+
+    # Função para salvar o gráfico como JPEG
+    def save_plot_as_jpeg():
+        buffer = BytesIO()
+        plt.savefig(buffer, format='jpeg')
+        buffer.seek(0)
+        return buffer
+
+    # Botão para baixar o gráfico
+    st.write("Baixe o gráfico gerado:")
+    buffer = save_plot_as_jpeg()
+    st.download_button(
+        label="Baixar gráfico como JPEG",
+        data=buffer,
+        file_name="grafico_incidentes_escolares.jpeg",
+        mime="image/jpeg"
+    )
+
 else:
     st.write("Por favor, insira os dados para gerar o gráfico.")
