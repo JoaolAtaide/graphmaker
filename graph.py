@@ -5,14 +5,24 @@ import pandas as pd
 from io import BytesIO
 
 # Título da aplicação
-st.title("Gerador de Gráficos de Incidentes Escolares")
+st.markdown(
+    """
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400&display=swap');
+    .font {
+        font-family: 'Barlow', sans-serif;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-# Instruções para o usuário
-st.write("Insira os dados para gerar o gráfico de incidentes por escola.")
+st.title("Gerador de Gráficos de Incidentes Escolares", anchor=None)
+st.markdown('<p class="font">Insira os dados para gerar o gráfico de incidentes por escola.</p>', unsafe_allow_html=True)
 
 # Coletar dados dos usuários
-escolas = st.text_input("Digite os nomes das escolas, separados por vírgula (Ex: Escola A, Escola B)")
-num_chamados = st.text_input("Digite o número de incidentes para cada escola, separados por vírgula (Ex: 4, 3)")
+escolas = st.text_input("Digite os nomes das escolas, separados por vírgula (Ex: Escola A, Escola B)", "")
+num_chamados = st.text_input("Digite o número de incidentes para cada escola, separados por vírgula (Ex: 4, 3)", "")
 
 # Processar os dados de entrada
 if escolas and num_chamados:
@@ -37,9 +47,9 @@ if escolas and num_chamados:
                 f'{width}', ha='left', va='center', color='white')  # Adicionar o texto
 
     # Ajustar rótulos e título
-    plt.title('Incidentes no último trimestre')
-    plt.xlabel('Número de Incidentes')
-    plt.ylabel('Escola')
+    plt.title('Incidentes no último trimestre', fontsize=14, fontfamily='Barlow')
+    plt.xlabel('Número de Incidentes', fontsize=12, fontfamily='Barlow')
+    plt.ylabel('Escola', fontsize=12, fontfamily='Barlow')
 
     # Mostrar o gráfico no app
     st.pyplot(plt)
@@ -52,7 +62,7 @@ if escolas and num_chamados:
         return buffer
 
     # Botão para baixar o gráfico
-    st.write("Baixe o gráfico gerado:")
+    st.markdown('<p class="font">Baixe o gráfico gerado:</p>', unsafe_allow_html=True)
     buffer = save_plot_as_jpeg()
     st.download_button(
         label="Baixar gráfico como JPEG",
@@ -62,4 +72,4 @@ if escolas and num_chamados:
     )
 
 else:
-    st.write("Por favor, insira os dados para gerar o gráfico.")
+    st.markdown('<p class="font">Por favor, insira os dados para gerar o gráfico.</p>', unsafe_allow_html=True)
