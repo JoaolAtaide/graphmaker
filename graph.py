@@ -3,21 +3,27 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 import requests
+import os
 from io import BytesIO
 from matplotlib import font_manager as fm
 
 # Function to download and use Barlow font
 def download_and_use_barlow():
+    # URL for the Barlow font
     url = "https://github.com/google/fonts/raw/main/ofl/barlow/Barlow-Regular.ttf"
     response = requests.get(url)
-    
-    # Load the font into Matplotlib directly from the downloaded content
-    font_bytes = BytesIO(response.content)
-    font_prop = fm.FontProperties(fname=font_bytes)  # Load font from memory
-    fm.fontManager.addfont(font_bytes)  # Add to font manager
-    
-    # Set this as the default font for Matplotlib
-    plt.rcParams['font.family'] = font_prop.get_name()
+
+    # Create a temporary directory to store the font
+    temp_dir = "/tmp"  # Using /tmp for temporary storage
+    font_path = os.path.join(temp_dir, "Barlow-Regular.ttf")
+
+    # Save the font to the temporary directory
+    with open(font_path, 'wb') as f:
+        f.write(response.content)
+
+    # Load the font into Matplotlib
+    fm.fontManager.addfont(font_path)  # Add to font manager
+    plt.rcParams['font.family'] = "Barlow"  # Set Barlow as the default font
 
 # Apply the Barlow font to Matplotlib
 download_and_use_barlow()
