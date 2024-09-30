@@ -1,28 +1,28 @@
-import matplotlib.pyplot as plt
+import streamlit as st
 import seaborn as sns
+import matplotlib.pyplot as plt
 import pandas as pd
 import requests
-import os
 from io import BytesIO
-import streamlit as st
 from matplotlib import font_manager as fm
 
-# Load the Barlow font from Google Fonts dynamically
+# Function to download and use Barlow font
 def download_and_use_barlow():
     url = "https://github.com/google/fonts/raw/main/ofl/barlow/Barlow-Regular.ttf"
     response = requests.get(url)
+    
+    # Load the font into Matplotlib directly from the downloaded content
     font_bytes = BytesIO(response.content)
-    font_path = '/tmp/Barlow-Regular.ttf'  # Temp location to store the font
-    with open(font_path, 'wb') as f:
-        f.write(font_bytes.read())
-    font_prop = fm.FontProperties(fname=font_path)
-    return font_prop
+    font_prop = fm.FontProperties(fname=font_bytes)  # Load font from memory
+    fm.fontManager.addfont(font_bytes)  # Add to font manager
+    
+    # Set this as the default font for Matplotlib
+    plt.rcParams['font.family'] = font_prop.get_name()
 
-# Set Barlow font in Matplotlib
-font_prop = download_and_use_barlow()
-plt.rcParams['font.family'] = font_prop.get_name()
+# Apply the Barlow font to Matplotlib
+download_and_use_barlow()
 
-# Load Google Font in Streamlit
+# Apply Barlow font to Streamlit interface
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;700&display=swap');
@@ -41,7 +41,7 @@ st.write("Insira os dados para gerar o gráfico de incidentes por escola.")
 escolas = st.text_input("Digite os nomes das escolas, separados por vírgula (Ex: Escola A, Escola B)", "")
 num_chamados = st.text_input("Digite o número de incidentes para cada escola, separados por vírgula (Ex: 4, 3)", "")
 
-# Process the input data and create the plot
+# Process input data and create plot
 if escolas and num_chamados:
     lista_escolas = [escola.strip() for escola in escolas.split(',')]
     lista_chamados = [int(chamado) for chamado in num_chamados.split(',')]
