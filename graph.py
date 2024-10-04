@@ -69,6 +69,9 @@ if escolas and num_chamados:
     plt.xlabel('Número de Incidentes', fontsize=12)
     plt.ylabel('Escola', fontsize=12)
 
+    # Adjust layout to avoid clipping
+    plt.tight_layout()
+
     # Display the chart
     st.pyplot(plt)
 
