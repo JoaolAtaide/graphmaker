@@ -65,7 +65,6 @@ if escolas and num_chamados:
         ax.text(0.1, p.get_y() + p.get_height() / 2, f'{width}', ha='left', va='center', color='white')
 
     # Customize labels and title
-    plt.title('Incidentes no último trimestre', fontsize=14)
     plt.xlabel('Número de Incidentes', fontsize=12)
     plt.ylabel('Escola', fontsize=12)
 
